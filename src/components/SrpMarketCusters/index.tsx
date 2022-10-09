@@ -1,22 +1,21 @@
 import * as d3 from "d3";
-import { useEffect, useRef } from "react";
-import { Svg } from "./styled";
+import { CSSProperties, useEffect, useRef } from "react";
+import { Container, Svg } from "./styled";
 import { data } from "./data";
+import useChartDimensions from "./useChartDimensions";
 
-const width = 800;
-const height = 500;
 const paddingTop = 50;
 const paddingBottom = 50;
 const paddingLeft = 35;
 const paddingRight = 20;
-const percentilLabels = [
+const percentileLabels = [
     "Lower Earners",
     "Mid Lower Earners",
     "Middle Earners",
     "Mid Height Earners",
     "Hight Earners",
 ];
-const perccentilColors = [
+const percentileColors = [
     "rgba(163, 168, 169, 0.9)",
     "rgba(159, 208, 151, 0.4)",
     "rgba(159, 208, 151, 0.6)",
@@ -26,10 +25,23 @@ const perccentilColors = [
 
 const currencyFormatter = new Intl.NumberFormat('en', { style: 'currency', currency: 'USD', notation: "compact" }).format;
 
-const SrpMarketClusters = () => {
+interface SrpMarketClustersProps {
+    style?: CSSProperties;
+    className?: string;
+}
+
+const SrpMarketClusters = (props: SrpMarketClustersProps) => {
+    const { style, className } = props;
+    
+    const containerRef = useRef<HTMLDivElement>(null);
+    const dimensions = useChartDimensions({ ref: containerRef });
+    
     const svgRef = useRef<SVGSVGElement>(null);
+
     useEffect(() => {
+        const { width, height } = dimensions;
         const svg = d3.select(svgRef.current);
+        svg.html("");
         const xDomain = [
             0, 
             d3.max(data.clusters, item => item.max) as number, 
@@ -72,9 +84,9 @@ const SrpMarketClusters = () => {
                             pos += 1;
                         }
                         if (xTickValues[pos] < d.max && xTickValues[pos] - d.min < d.max - xTickValues[pos]) {
-                            return perccentilColors[pos];
+                            return percentileColors[pos];
                         }
-                        return perccentilColors[pos - 1]
+                        return percentileColors[pos - 1]
                     })
             )
         // labels
@@ -116,7 +128,7 @@ const SrpMarketClusters = () => {
                         .attr("y", paddingTop - 15)
                         .attr("text-anchor", "middle")
                         .classed("section-label", true)
-                        .text((_, i) => percentilLabels[i])
+                        .text((_, i) => percentileLabels[i])
 
                 }
             )
@@ -173,10 +185,12 @@ const SrpMarketClusters = () => {
                     .text(currencyFormatter(data.prediction.max));       
             }
         );       
-    }, []);
+    }, [dimensions]);
     return (
-        <Svg viewBox="0 0 800 500" ref={svgRef}>
-        </Svg>
+        <Container style={style} className={className} ref={containerRef}>
+            <Svg width={dimensions.width} height={dimensions.height} ref={svgRef}>
+            </Svg>
+        </Container>
     )
 }
 
