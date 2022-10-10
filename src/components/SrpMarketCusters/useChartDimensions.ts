@@ -5,7 +5,7 @@ interface Props {
     ref: RefObject<HTMLDivElement>;
 }
 
-interface Dimensions {
+export interface Dimensions {
     width: number;
     height: number;
 }

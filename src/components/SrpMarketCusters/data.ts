@@ -1,14 +1,4 @@
-
-export interface Cluster {
-    min: number;
-    max: number;
-    houses: number;
-}
-
-export interface Data {
-    clusters: Cluster[];
-    prediction: { min: number; max: number; }
-}
+import { Data } from "./index";
 
 export const data: Data = {
     clusters: [

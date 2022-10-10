@@ -1,11 +1,12 @@
 import SrpMarketClusters from "./components/SrpMarketCusters";
 import { Application, Container } from "./styled";
+import { data } from "./components/SrpMarketCusters/data";
 
 function App() {
   return (
     <Application>
       <Container>
-        <SrpMarketClusters />
+        <SrpMarketClusters data={data}/>
       </Container>
     </Application>
   );
