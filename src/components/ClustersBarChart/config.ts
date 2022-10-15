@@ -6,8 +6,8 @@ export const percentileLabels = [
   'Lower Earners',
   'Mid Lower Earners',
   'Middle Earners',
-  'Mid Height Earners',
-  'Hight Earners'
+  'Mid High Earners',
+  'High Earners'
 ]
 export const percentileColors = [
   'rgba(163, 168, 169, 0.9)',

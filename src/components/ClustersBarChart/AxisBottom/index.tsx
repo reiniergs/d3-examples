@@ -36,7 +36,6 @@ const AxisBottom = (props: AxisProps) => {
       >
         <line
           y2="6"
-
           stroke="currentColor"
         />
         <line

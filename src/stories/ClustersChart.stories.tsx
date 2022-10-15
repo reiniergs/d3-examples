@@ -1,9 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react'
-import ClusterChart from '../components/ClusterBarChart'
-import { data } from '../components/ClusterBarChart/data'
+import ClusterChart from '../components/ClustersBarChart'
+import { data } from '../components/ClustersBarChart/data'
 
 const Default: ComponentMeta<typeof ClusterChart> = {
-  title: 'Library/ClusterBarChart',
+  title: 'Library/ClustersBarChart',
   component: ClusterChart,
   argTypes: {}
 }
