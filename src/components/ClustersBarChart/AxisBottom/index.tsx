@@ -1,33 +1,23 @@
 import * as d3 from 'd3'
 import { useRef } from 'react'
-import { Data } from '..'
-import { Dimensions } from '../useChartDimensions'
-import { percentileLabels, paddingTop, paddingLeft, paddingBottom, paddingRight, currencyFormatter } from '../config'
+import { paddingTop, paddingLeft, paddingBottom, paddingRight, currencyFormatter } from '../config'
+import useChartContext from '../useChartContext'
+import RenderIf from 'react-rainbow-components/components/RenderIf'
+import useXDomain from '../useXDomain'
+import useTickValues from '../useTickValues'
 
-interface AxisProps {
-  dimensions: Dimensions
-  data: Data
-}
-
-const AxisBottom = (props: AxisProps) => {
-  const { dimensions, data } = props
+const AxisBottom = () => {
+  const { dimensions, percentiles } = useChartContext()
   const { width, height } = dimensions
   const ref = useRef<SVGSVGElement>(null)
-  const xDomain = [
-    0,
-    d3.max(data.clusters, item => item.max) as number
-  ]
+
+  const xDomain = useXDomain()
+  const xTickValues = useTickValues()
+
   const xScale = d3.scaleLinear().domain(
     xDomain
   ).range([0, width - paddingRight - paddingLeft])
-  const xTickValues = [
-    0,
-    xDomain[1] / 5,
-    xDomain[1] / 5 * 2,
-    xDomain[1] / 5 * 3,
-    xDomain[1] / 5 * 4,
-    xDomain[1]
-  ]
+
   const ticks = xTickValues.map((d, i) => {
     return (
       <g
@@ -51,14 +41,16 @@ const AxisBottom = (props: AxisProps) => {
         >
           {currencyFormatter(d)}
         </text>
-        <text
-          x={xScale(xTickValues[1] / 2)}
-          y={-height + paddingTop + paddingBottom - 5}
-          textAnchor="middle"
-          className="label"
-        >
-          {percentileLabels[i]}
-        </text>
+        <RenderIf isTrue={i < percentiles.length}>
+          <text
+            x={xScale(xTickValues[1] / 2)}
+            y={-height + paddingTop + paddingBottom - 5}
+            textAnchor="middle"
+            className="label"
+          >
+            {percentiles[i]?.name}
+          </text>
+        </RenderIf>
       </g>
     )
   })

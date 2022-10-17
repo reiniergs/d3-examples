@@ -1,16 +1,10 @@
 import * as d3 from 'd3'
 import { useEffect, useRef } from 'react'
-import { Data } from '..'
-import { Dimensions } from '../useChartDimensions'
 import { paddingTop, paddingLeft, paddingBottom } from '../config'
+import useChartContext from '../useChartContext'
 
-interface AxisProps {
-  dimensions: Dimensions
-  data: Data
-}
-
-const AxisLeft = (props: AxisProps) => {
-  const { dimensions, data } = props
+const AxisLeft = () => {
+  const { dimensions, data } = useChartContext()
   const { height } = dimensions
   const ref = useRef<SVGSVGElement>(null)
   useEffect(() => {

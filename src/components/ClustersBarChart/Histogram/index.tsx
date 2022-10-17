@@ -1,37 +1,25 @@
 import { useRef } from 'react'
 import * as d3 from 'd3'
-import { Data } from '..'
-import { Dimensions } from '../useChartDimensions'
-import { paddingTop, paddingLeft, paddingBottom, paddingRight, percentileColors } from '../config'
+import { paddingTop, paddingLeft, paddingBottom, paddingRight } from '../config'
+import useChartContext from '../useChartContext'
+import useTickValues from '../useTickValues'
+import useXDomain from '../useXDomain'
 
-interface Props {
-  dimensions: Dimensions
-  data: Data
-}
-
-const Histogram = (props: Props) => {
-  const { data, dimensions } = props
+const Histogram = () => {
+  const { data, dimensions, percentiles } = useChartContext()
   const { height, width } = dimensions
   const ref = useRef<SVGSVGElement>(null)
-  const xDomain = [
-    0,
-    d3.max(data.clusters, item => item.max) as number
-  ]
+  const xDomain = useXDomain()
+  const xTickValues = useTickValues()
   const yDomain = d3.extent(data.clusters, item => item.houses) as [number, number]
+
   const yScale = d3.scaleLinear()
     .domain([0, yDomain[1] + yDomain[1] / 5])
     .range([0, height - paddingTop - paddingBottom])
   const xScale = d3.scaleLinear().domain(
     xDomain
   ).range([0, width - paddingRight - paddingLeft])
-  const xTickValues = [
-    0,
-    xDomain[1] / 5,
-    xDomain[1] / 5 * 2,
-    xDomain[1] / 5 * 3,
-    xDomain[1] / 5 * 4,
-    xDomain[1]
-  ]
+
   const labels = data.clusters.map((d, i) => {
     return (
       <text
@@ -52,9 +40,9 @@ const Histogram = (props: Props) => {
       pos += 1
     }
     if (xTickValues[pos] < d.max && xTickValues[pos] - d.min < d.max - xTickValues[pos]) {
-      fill = percentileColors[pos]
+      fill = percentiles[pos].color
     }
-    fill = percentileColors[pos - 1]
+    fill = percentiles[pos - 1].color
     return (
       <rect
         key={i}

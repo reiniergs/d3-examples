@@ -1,16 +1,10 @@
 import { useRef } from 'react'
 import * as d3 from 'd3'
-import { Data } from '..'
-import { Dimensions } from '../useChartDimensions'
 import { paddingTop, paddingLeft, paddingBottom, paddingRight, currencyFormatter } from '../config'
+import useChartContext from '../useChartContext'
 
-interface Props {
-  dimensions: Dimensions
-  data: Data
-}
-
-const Prediction = (props: Props) => {
-  const { data, dimensions } = props
+const Prediction = () => {
+  const { data, dimensions } = useChartContext()
   const { height, width } = dimensions
   const ref = useRef<SVGSVGElement>(null)
   const xDomain = [
